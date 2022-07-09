@@ -1,0 +1,43 @@
+@extends('shell.shared.layout')
+
+@section('content')
+    <h2 class="page-header">AI Güncel <a href="{{ route('news.create') }}" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Yeni Ekle</a></h2>
+
+    <ul id="lang-tabs" class="nav nav-tabs">
+        @foreach(config('app.languages') as $language)
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-{{ $language }}">{{ $language }}</a></li>
+        @endforeach
+    </ul>
+
+    <div class="tab-content">
+        @foreach(config('app.languages') as $language)
+            <div id="tab-{{ $language }}" class="tab-pane">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Başlık</th>
+                            <th>Etkinlik Bitiş Tarihi</th>
+                            <th>Durum</th>
+                            <th class="action-column" style="width: 120px;">Aksiyon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($news->where('language',$language) as $item)
+                            <tr>
+                                <td>{{ $item->title }}</td>
+                                <td>{{ $item->ends_at }}</td>
+                                <td>{{ $item->status }}</td>
+                                <td>
+                                    <a href="{{ route('news.create', ['origin_id' => $item->id]) }}" class="btn btn-info btn-sm"><i class="fa fa-copy"></i></a>
+                                    <a href="{{ route('news.edit', $item->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
+                                    <a href="{{ route('news.destroy', $item->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endforeach
+    </div>
+
+@endsection
